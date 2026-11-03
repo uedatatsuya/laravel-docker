@@ -1,3 +1,26 @@
+.DEFAULT_GOAL := install
+
+.PHONY: light-install light-up light-down light-logs light-test light-app
+
+LIGHT_COMPOSE = docker compose -f docker-compose.lightweight.yml
+
+# Create a new Laravel application in an empty src directory.
+light-install:
+	test ! -e src/composer.json
+	mkdir -p src
+	$(LIGHT_COMPOSE) run --rm app composer create-project --prefer-dist --no-interaction laravel/laravel .
+	$(LIGHT_COMPOSE) up -d
+light-up:
+	$(LIGHT_COMPOSE) up -d
+light-down:
+	$(LIGHT_COMPOSE) down
+light-logs:
+	$(LIGHT_COMPOSE) logs --follow
+light-test:
+	$(LIGHT_COMPOSE) exec app php artisan test
+light-app:
+	$(LIGHT_COMPOSE) exec app sh
+
 install:
 	@make build
 	@make up
