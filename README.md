@@ -15,6 +15,38 @@ Build a simple laravel development environment with docker-compose. Compatible w
 
 ## Usage
 
+### Lightweight setup (latest Laravel, PHP 8.4, SQLite)
+
+For a new application, use the lightweight development configuration:
+
+```bash
+make light-install
+```
+
+Open http://localhost:8080. This creates the latest compatible stable Laravel
+application in `src`, installs its dependencies, initializes SQLite, and starts
+the development server. The `src` directory must be empty on first installation.
+Application files and the SQLite database persist in `src` when containers stop.
+
+```bash
+make light-up      # Start an installed application
+make light-down    # Stop and remove the development container
+make light-logs    # Follow server logs
+make light-test    # Run Laravel's tests
+make light-app     # Open a shell
+```
+
+The equivalent Compose command is
+`docker compose -f docker-compose.lightweight.yml up -d`.
+Set `WEB_PUBLISHED_PORT` to change port 8080. On Linux, if your user/group IDs
+are not 1000, set `LOCAL_UID=$(id -u)` and `LOCAL_GID=$(id -g)` when running make.
+
+This configuration uses one Alpine PHP container with Composer, SQLite, and
+Laravel's development server. It does not provide MySQL, Nginx, Xdebug, or MailHog;
+mail is written to Laravel's log. It is intended for local development, not
+production. The original configuration and its commands below remain available
+through `docker-compose.yml`.
+
 ### Laravel install
 
 1. Click [Use this template](https://github.com/ucan-lab/docker-laravel/generate)
